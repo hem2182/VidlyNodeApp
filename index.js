@@ -15,6 +15,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(helmet());
 
+app.set("view engine", "pug");
+app.set("views", "./views");
+
 // Configuration
 console.log("Application Name " + config.get("name"));
 console.log("Application Mail Server " + config.get("mail.host"));
@@ -51,7 +54,11 @@ const genres = [
 ];
 
 app.get("/api/genres", (req, res) => {
-  res.send(genres);
+  // res.send(genres);
+  res.render("index", {
+    title: "Vidly Video Rental App",
+    message: "Hi Folks. ",
+  });
 });
 
 app.post("/api/genres", (req, res) => {
