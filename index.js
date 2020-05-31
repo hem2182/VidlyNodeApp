@@ -1,51 +1,22 @@
-const startupDebugger = require("debug")("app:startup");
-const dbDebugger = require("debug")("app:db");
 require("dotenv").config();
 
 const config = require("config");
-const morgan = require("morgan");
-const helmet = require("helmet");
 const Joi = require("joi");
-const logger = require("./logger");
 const express = require("express");
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
-app.use(helmet());
-
-app.set("view engine", "pug");
-app.set("views", "./views");
 
 // Configuration
 console.log("Application Name " + config.get("name"));
 console.log("Application Mail Server " + config.get("mail.host"));
 console.log("Application Mail Password: " + config.get("mail.password"));
 
-// enabling DEBUG logic
-const debugValue = process.env.DEBUG;
-if (debugValue === "app:startup") {
-  startupDebugger.enabled = true;
-} else if (debugValue === "app:db") {
-  dbDebugger.enabled = true;
-} else if (debugValue === "all" || debugValue === "app:*") {
-  dbDebugger.enabled = true;
-  startupDebugger.enabled = true;
-} else if (debugValue === "None") {
-  dbDebugger.enabled = false;
-  startupDebugger.enabled = false;
-}
-
 if (app.get("env") === "development") {
-  startupDebugger("Morgan Enabled...");
-  app.use(morgan("tiny"));
+  // app.use(morgan("tiny"));
 }
-
-// DB Work.
-dbDebugger("Connected to the Database...");
-
-app.use(logger);
 
 const genres = [
   { id: 1, name: "Action" },
@@ -54,11 +25,7 @@ const genres = [
 ];
 
 app.get("/api/genres", (req, res) => {
-  // res.send(genres);
-  res.render("index", {
-    title: "Vidly Video Rental App",
-    message: "Hi Folks. ",
-  });
+  res.send(genres);
 });
 
 app.post("/api/genres", (req, res) => {
