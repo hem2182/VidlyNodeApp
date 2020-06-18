@@ -5,6 +5,7 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const logger = require("./middleware/logger");
 const genres = require("./routes/genres");
+const customers = require("./routes/customers");
 const home = require("./routes/home");
 const mongoose = require("mongoose");
 
@@ -45,6 +46,7 @@ dbDebugger("Connected to the Database...");
 
 // routes
 app.use("/api/genres", genres);
+app.use("/api/customers", customers);
 app.use("/", home);
 
 // listener
